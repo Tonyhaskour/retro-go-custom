@@ -11,7 +11,7 @@
 #define RG_AUDIO_USE_EXT_DAC        0  
 
 // Video (ST7735 Configuration)
-#define RG_SCREEN_DRIVER            1   // 1 = ST7735
+#define RG_SCREEN_DRIVER            0      // 1 = ST7735
 #define RG_SCREEN_HOST              SPI2_HOST
 #define RG_SCREEN_SPEED             SPI_MASTER_FREQ_40M
 #define RG_SCREEN_BACKLIGHT         1
