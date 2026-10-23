@@ -24,6 +24,8 @@
 #include "targets/byteboi-rev1/config.h"
 #elif defined(RG_TARGET_RACHEL_ESP32)
 #include "targets/rachel-esp32/config.h"
+#elif defined(RG_TARGET_ESP32S3_ST7735)
+#include "targets/esp32s3-st7735/config.h"
 #else
 #warning "No target defined. Defaulting to ODROID-GO."
 #include "targets/odroid-go/config.h"
@@ -44,7 +46,7 @@
     // TODO: Decide which additional credits should be included here?
     // Maybe the main author for each emulator? Or should that credit be only when seeing `about` inside said app?
     // What about libraries and fonts (lodepng, etc)?
-    // What about targets/ports? Should we have a RG_TARGET_AUTHOR to append here?
+    // What about targets/ports? Should we have an RG_TARGET_AUTHOR to append here?
 #endif
 
 #ifndef RG_PROJECT_APP
