@@ -19,7 +19,7 @@ jobs:
           esp_idf_version: v4.4.2
           target: esp32s3
           command: |
-            cd $GITHUB_WORKSPACE
+            pip install -r requirements.txt
             python rg_tool.py build-img --target=esp32s3-st7735
 
       - name: Upload Firmware Artifact
