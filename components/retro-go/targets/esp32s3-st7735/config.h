@@ -4,7 +4,7 @@
 // Storage
 #define RG_STORAGE_ROOT             "/sd"
 #define RG_STORAGE_SDSPI_HOST       SPI3_HOST
-#define RG_STORAGE_SDSPI_SPEED      SDMMC_FREQ_PROBING 
+#define RG_STORAGE_SDSPI_SPEED      SDMMC_FREQ_PROBING // Kept low to prevent breadboard noise
 
 // Audio
 #define RG_AUDIO_USE_INT_DAC        0
@@ -41,13 +41,13 @@
     ILI9341_CMD(0xE1, 0x0F, 0x1B, 0x0F, 0x17, 0x33, 0x2C, 0x29, 0x2E, 0x30, 0x30, 0x39, 0x3F, 0x00, 0x07, 0x03, 0x10); \
     ILI9341_CMD(0x29); /* Display ON */
 
-// Input (A button moved to GPIO 15 to clear the recovery loop)
+// Input
 #define RG_GAMEPAD_GPIO_MAP {\
     {RG_KEY_UP,     GPIO_NUM_38, GPIO_PULLUP_ONLY, 0},\
     {RG_KEY_DOWN,   GPIO_NUM_39, GPIO_PULLUP_ONLY, 0},\
     {RG_KEY_LEFT,   GPIO_NUM_47, GPIO_PULLUP_ONLY, 0},\
     {RG_KEY_RIGHT,  GPIO_NUM_48, GPIO_PULLUP_ONLY, 0},\
-    {RG_KEY_A,      GPIO_NUM_15, GPIO_PULLUP_ONLY, 0},\
+    {RG_KEY_A,      GPIO_NUM_6,  GPIO_PULLUP_ONLY, 0},\
     {RG_KEY_B,      GPIO_NUM_19, GPIO_PULLUP_ONLY, 0},\
     {RG_KEY_START,  GPIO_NUM_4,  GPIO_PULLUP_ONLY, 0},\
     {RG_KEY_SELECT, GPIO_NUM_5,  GPIO_PULLUP_ONLY, 0},\
