@@ -11,14 +11,14 @@
 #define RG_AUDIO_USE_EXT_DAC        0  
 
 // Video (ST7735 Configuration)
-#define RG_SCREEN_DRIVER            0      // 1 = ST7735
+#define RG_SCREEN_DRIVER            0      // 0 = ILI9341 driver (used for ST7735 compatibility)
 #define RG_SCREEN_HOST              SPI2_HOST
-#define RG_SCREEN_SPEED             SPI_MASTER_FREQ_40M
+#define RG_SCREEN_SPEED             SPI_MASTER_FREQ_26M // Lowered from 40M for breadboard stability
 #define RG_SCREEN_BACKLIGHT         1
 #define RG_SCREEN_WIDTH             160
 #define RG_SCREEN_HEIGHT            128
-#define RG_SCREEN_ROTATE            1   // Adjust to 1, 2, or 3 depending on how your screen is mounted
-#define RG_SCREEN_MARGIN_TOP        0
+#define RG_SCREEN_ROTATE            1   
+#define RG_SCREEN_MARGIN_TOP        24  // <--- THE FIX: Offset to skip the hidden 24 pixels
 #define RG_SCREEN_MARGIN_BOTTOM     0
 #define RG_SCREEN_MARGIN_LEFT       0
 #define RG_SCREEN_MARGIN_RIGHT      0
