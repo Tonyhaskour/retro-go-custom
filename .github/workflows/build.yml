@@ -16,14 +16,11 @@ jobs:
       - name: Build Firmware with ESP-IDF
         uses: espressif/esp-idf-ci-action@v1
         with:
-          esp_idf_version: v4.4.2
+          esp_idf_version: v4.4.7  # <--- UPGRADED FROM 4.4.2
           target: esp32s3
           command: |
-            # Nuke the build folders and generated configs to force PSRAM settings
             rm -f launcher/sdkconfig retro-core/sdkconfig gwenesis/sdkconfig fmsx/sdkconfig prboom-go/sdkconfig
             rm -rf launcher/build retro-core/build gwenesis/build fmsx/build prboom-go/build build
-            
-            # Build the firmware
             python rg_tool.py build-img --target=esp32s3-st7735
 
       - name: Upload Firmware Artifact
