@@ -13,15 +13,18 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Build Firmware with ESP-IDF
+      - name: Prepare Config and Build
         uses: espressif/esp-idf-ci-action@v1
         with:
           esp_idf_version: v4.4.2
           target: esp32s3
           command: |
-            # Force delete all old builds and pre-existing sdkconfig files so sdkconfig.defaults is read
+            # Clean old builds and configs
             rm -rf build sdkconfig */build
             find . -name "sdkconfig" -delete
+            
+            # Force copy target's sdkconfig.defaults to project root so ESP-IDF reads it
+            cp components/retro-go/targets/esp32s3-st7735/sdkconfig.defaults ./sdkconfig.defaults
             
             # Build the firmware
             python rg_tool.py build-img --target=esp32s3-st7735
