@@ -1,10 +1,19 @@
 // Target definition
 #define RG_TARGET_NAME             "ESP32S3-ST7735"
 
+// Force ESP-IDF compiler flags for N16R8 (16MB Flash, 8MB Octal PSRAM)
+#pragma GCC diagnostic ignored "-Wcpp"
+#define CONFIG_ESPTOOLPY_FLASHSIZE_16MB 1
+#define CONFIG_ESPTOOLPY_FLASHSIZE "16MB"
+#define CONFIG_SPIRAM 1
+#define CONFIG_SPIRAM_MODE_OCT 1
+#define CONFIG_SPIRAM_SPEED_80M 1
+#define CONFIG_SPIRAM_TYPE_AUTO 1
+
 // Storage
 #define RG_STORAGE_ROOT             "/sd"
 #define RG_STORAGE_SDSPI_HOST       SPI3_HOST
-#define RG_STORAGE_SDSPI_SPEED      SDMMC_FREQ_PROBING // SLOWEST speed to prevent CRC errors on breadboard
+#define RG_STORAGE_SDSPI_SPEED      SDMMC_FREQ_PROBING 
 
 // Audio
 #define RG_AUDIO_USE_INT_DAC        0
@@ -36,18 +45,18 @@
     ILI9341_CMD(0xC3, 0x8A, 0x2A); \
     ILI9341_CMD(0xC4, 0x8A, 0xEE); \
     ILI9341_CMD(0xC5, 0x0E); /* VCOM Control */ \
-    ILI9341_CMD(0x36, 0x68); /* MADCTL - Changed to 0x68 to flip 180 degrees */ \
+    ILI9341_CMD(0x36, 0x68); /* MADCTL */ \
     ILI9341_CMD(0xE0, 0x0F, 0x1A, 0x0F, 0x18, 0x2F, 0x28, 0x20, 0x22, 0x1F, 0x1B, 0x23, 0x37, 0x00, 0x07, 0x02, 0x10); \
     ILI9341_CMD(0xE1, 0x0F, 0x1B, 0x0F, 0x17, 0x33, 0x2C, 0x29, 0x2E, 0x30, 0x30, 0x39, 0x3F, 0x00, 0x07, 0x03, 0x10); \
     ILI9341_CMD(0x29); /* Display ON */
 
-// Input
+// Input (Moved A button to GPIO 15 to stop the stuck button / recovery loop)
 #define RG_GAMEPAD_GPIO_MAP {\
     {RG_KEY_UP,     GPIO_NUM_38, GPIO_PULLUP_ONLY, 0},\
     {RG_KEY_DOWN,   GPIO_NUM_39, GPIO_PULLUP_ONLY, 0},\
     {RG_KEY_LEFT,   GPIO_NUM_47, GPIO_PULLUP_ONLY, 0},\
     {RG_KEY_RIGHT,  GPIO_NUM_48, GPIO_PULLUP_ONLY, 0},\
-    {RG_KEY_A,      GPIO_NUM_6,  GPIO_PULLUP_ONLY, 0},\
+    {RG_KEY_A,      GPIO_NUM_15, GPIO_PULLUP_ONLY, 0},\
     {RG_KEY_B,      GPIO_NUM_19, GPIO_PULLUP_ONLY, 0},\
     {RG_KEY_START,  GPIO_NUM_4,  GPIO_PULLUP_ONLY, 0},\
     {RG_KEY_SELECT, GPIO_NUM_5,  GPIO_PULLUP_ONLY, 0},\
