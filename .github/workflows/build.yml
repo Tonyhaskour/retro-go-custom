@@ -19,7 +19,11 @@ jobs:
           esp_idf_version: v4.4.2
           target: esp32s3
           command: |
-            pip install -r requirements.txt
+            # 1. Force delete all old build folders and configs to apply the new PSRAM settings
+            rm -rf build sdkconfig
+            rm -rf */build */sdkconfig
+            
+            # 2. Build the firmware
             python rg_tool.py build-img --target=esp32s3-st7735
 
       - name: Upload Firmware Artifact
