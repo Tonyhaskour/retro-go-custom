@@ -19,11 +19,11 @@ jobs:
           esp_idf_version: v4.4.2
           target: esp32s3
           command: |
-            # 1. Force delete all old build folders and configs to apply the new PSRAM settings
-            rm -rf build sdkconfig
-            rm -rf */build */sdkconfig
+            # Force delete ALL generated config and build files so sdkconfig.defaults is applied
+            rm -f launcher/sdkconfig retro-core/sdkconfig gwenesis/sdkconfig fmsx/sdkconfig prboom-go/sdkconfig
+            rm -rf launcher/build retro-core/build gwenesis/build fmsx/build prboom-go/build build
             
-            # 2. Build the firmware
+            # Build the firmware
             python rg_tool.py build-img --target=esp32s3-st7735
 
       - name: Upload Firmware Artifact
