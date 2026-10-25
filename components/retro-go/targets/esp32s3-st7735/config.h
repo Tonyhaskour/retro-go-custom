@@ -4,7 +4,7 @@
 // Storage
 #define RG_STORAGE_ROOT             "/sd"
 #define RG_STORAGE_SDSPI_HOST       SPI3_HOST
-#define RG_STORAGE_SDSPI_SPEED      SDMMC_FREQ_PROBING // SLOWED DOWN to guarantee SD card mount
+#define RG_STORAGE_SDSPI_SPEED      SDMMC_FREQ_PROBING // SLOWEST speed to prevent CRC errors on breadboard
 
 // Audio
 #define RG_AUDIO_USE_INT_DAC        0
