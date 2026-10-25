@@ -1,15 +1,6 @@
 // Target definition
 #define RG_TARGET_NAME             "ESP32S3-ST7735"
 
-// Force ESP-IDF compiler flags for N16R8 (16MB Flash, 8MB Octal PSRAM)
-#pragma GCC diagnostic ignored "-Wcpp"
-#define CONFIG_ESPTOOLPY_FLASHSIZE_16MB 1
-#define CONFIG_ESPTOOLPY_FLASHSIZE "16MB"
-#define CONFIG_SPIRAM 1
-#define CONFIG_SPIRAM_MODE_OCT 1
-#define CONFIG_SPIRAM_SPEED_80M 1
-#define CONFIG_SPIRAM_TYPE_AUTO 1
-
 // Storage
 #define RG_STORAGE_ROOT             "/sd"
 #define RG_STORAGE_SDSPI_HOST       SPI3_HOST
@@ -50,7 +41,7 @@
     ILI9341_CMD(0xE1, 0x0F, 0x1B, 0x0F, 0x17, 0x33, 0x2C, 0x29, 0x2E, 0x30, 0x30, 0x39, 0x3F, 0x00, 0x07, 0x03, 0x10); \
     ILI9341_CMD(0x29); /* Display ON */
 
-// Input (Moved A button to GPIO 15 to stop the stuck button / recovery loop)
+// Input (A button moved to GPIO 15 to clear the recovery loop)
 #define RG_GAMEPAD_GPIO_MAP {\
     {RG_KEY_UP,     GPIO_NUM_38, GPIO_PULLUP_ONLY, 0},\
     {RG_KEY_DOWN,   GPIO_NUM_39, GPIO_PULLUP_ONLY, 0},\
