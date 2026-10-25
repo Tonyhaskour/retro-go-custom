@@ -17,7 +17,7 @@
 #define RG_SCREEN_BACKLIGHT         1
 #define RG_SCREEN_WIDTH             160
 #define RG_SCREEN_HEIGHT            128
-#define RG_SCREEN_ROTATE            3   // Landscape. Try 3 if image is upside down.
+#define RG_SCREEN_ROTATE            1   // Landscape. Try 3 if image is upside down.
 #define RG_SCREEN_MARGIN_TOP        0   
 #define RG_SCREEN_MARGIN_BOTTOM     0
 #define RG_SCREEN_MARGIN_LEFT       24  // Shifts image right to hide bottom noise
