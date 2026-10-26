@@ -1,10 +1,10 @@
 // Target definition
 #define RG_TARGET_NAME             "ESP32S3-ST7735"
 
-// Storage
+// Storage (SPI2_HOST matches the screen to fix the SD card)
 #define RG_STORAGE_ROOT             "/sd"
-#define RG_STORAGE_SDSPI_HOST       SPI2_HOST             // MUST match RG_SCREEN_HOST
-#define RG_STORAGE_SDSPI_SPEED      SDMMC_FREQ_DEFAULT    // No longer need the slow probing speed
+#define RG_STORAGE_SDSPI_HOST       SPI2_HOST             
+#define RG_STORAGE_SDSPI_SPEED      SDMMC_FREQ_DEFAULT    
 
 // Audio (Disabled)
 #define RG_AUDIO_USE_INT_DAC        0
@@ -20,8 +20,8 @@
 #define RG_SCREEN_ROTATE            1   
 #define RG_SCREEN_MARGIN_TOP        0   
 #define RG_SCREEN_MARGIN_BOTTOM     0
-#define RG_SCREEN_MARGIN_LEFT       24  
-#define RG_SCREEN_MARGIN_RIGHT      24  
+#define RG_SCREEN_MARGIN_LEFT       0  // Changed to 0 to fill screen
+#define RG_SCREEN_MARGIN_RIGHT      0  // Changed to 0 to fill screen
 
 #define RG_SCREEN_INIT() \
     ILI9341_CMD(0x01); /* Software Reset */ \
@@ -41,16 +41,16 @@
     ILI9341_CMD(0xE1, 0x0F, 0x1B, 0x0F, 0x17, 0x33, 0x2C, 0x29, 0x2E, 0x30, 0x30, 0x39, 0x3F, 0x00, 0x07, 0x03, 0x10); \
     ILI9341_CMD(0x29); /* Display ON */
 
-// Input (Note: B button moved to GPIO 7 to avoid USB D- conflict)
+// Input (Remapped to match your hardware behavior)
 #define RG_GAMEPAD_GPIO_MAP {\
     {RG_KEY_UP,     GPIO_NUM_38, GPIO_PULLUP_ONLY, 0},\
     {RG_KEY_DOWN,   GPIO_NUM_39, GPIO_PULLUP_ONLY, 0},\
-    {RG_KEY_LEFT,   GPIO_NUM_47, GPIO_PULLUP_ONLY, 0},\
-    {RG_KEY_RIGHT,  GPIO_NUM_48, GPIO_PULLUP_ONLY, 0},\
-    {RG_KEY_A,      GPIO_NUM_6,  GPIO_PULLUP_ONLY, 0},\
-    {RG_KEY_B,      GPIO_NUM_7,  GPIO_PULLUP_ONLY, 0},\
-    {RG_KEY_START,  GPIO_NUM_4,  GPIO_PULLUP_ONLY, 0},\
-    {RG_KEY_SELECT, GPIO_NUM_5,  GPIO_PULLUP_ONLY, 0},\
+    {RG_KEY_LEFT,   GPIO_NUM_4,  GPIO_PULLUP_ONLY, 0}, /* Moved Left to 4 */ \
+    {RG_KEY_RIGHT,  GPIO_NUM_5,  GPIO_PULLUP_ONLY, 0}, /* Moved Right to 5 */ \
+    {RG_KEY_A,      GPIO_NUM_15, GPIO_PULLUP_ONLY, 0}, /* Moved A to 15 */ \
+    {RG_KEY_B,      GPIO_NUM_16, GPIO_PULLUP_ONLY, 0}, /* Moved B to 16 */ \
+    {RG_KEY_START,  GPIO_NUM_48, GPIO_PULLUP_ONLY, 0}, /* Moved Start to 48 */ \
+    {RG_KEY_SELECT, GPIO_NUM_47, GPIO_PULLUP_ONLY, 0}, /* Moved Select to 47 */ \
 }
 
 // Battery
