@@ -332,7 +332,7 @@ if (gui.joystick)
             else if (joystick & (RG_KEY_DOWN|RG_KEY_RIGHT|RG_KEY_START)) {
                 change_tab = 1;
             }
-            else if (joystick == RG_KEY_A) {
+            else if (joystick & RG_KEY_A) {
                 gui.browse = true;
             }
         }
