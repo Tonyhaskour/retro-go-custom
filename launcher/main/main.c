@@ -229,9 +229,9 @@ static void retro_loop(void)
         joystick = 0;
 
         gui.joystick = rg_input_read_gamepad();
-if (gui.joystick != prev_joystick)
-    RG_LOGW("KEYS: 0x%04X\n", (unsigned)gui.joystick);
-if (gui.joystick)
+        if (gui.joystick != prev_joystick)
+            RG_LOGW("KEYS: 0x%04X\n", (unsigned)gui.joystick);
+        if (gui.joystick)
         {
             if (prev_joystick != gui.joystick)
             {
@@ -312,7 +312,8 @@ if (gui.joystick)
             else if (joystick == RG_KEY_RIGHT) {
                 gui_scroll_list(tab, SCROLL_PAGE, 1);
             }
-            else if (joystick == RG_KEY_A) {
+            // CHANGED == TO & HERE
+            else if (joystick & RG_KEY_A) {
                 gui_event(TAB_ACTION, tab);
                 redraw_pending = true;
             }
@@ -332,6 +333,7 @@ if (gui.joystick)
             else if (joystick & (RG_KEY_DOWN|RG_KEY_RIGHT|RG_KEY_START)) {
                 change_tab = 1;
             }
+            // CHANGED == TO & HERE
             else if (joystick & RG_KEY_A) {
                 gui.browse = true;
             }
