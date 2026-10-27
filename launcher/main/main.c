@@ -228,7 +228,10 @@ static void retro_loop(void)
         prev_joystick = gui.joystick;
         joystick = 0;
 
-        if ((gui.joystick = rg_input_read_gamepad()))
+        gui.joystick = rg_input_read_gamepad();
+if (gui.joystick != prev_joystick)
+    RG_LOGW("KEYS: 0x%04X\n", (unsigned)gui.joystick);
+if (gui.joystick)
         {
             if (prev_joystick != gui.joystick)
             {
