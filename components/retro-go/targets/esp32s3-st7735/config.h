@@ -1,7 +1,7 @@
 // Target definition
 #define RG_TARGET_NAME             "ESP32S3-ST7735"
 
-// Storage (SPI2_HOST matches the screen to fix the SD card)
+// Storage
 #define RG_STORAGE_ROOT             "/sd"
 #define RG_STORAGE_SDSPI_HOST       SPI2_HOST             
 #define RG_STORAGE_SDSPI_SPEED      SDMMC_FREQ_DEFAULT    
@@ -41,7 +41,7 @@
     ILI9341_CMD(0xE1, 0x0F, 0x1B, 0x0F, 0x17, 0x33, 0x2C, 0x29, 0x2E, 0x30, 0x30, 0x39, 0x3F, 0x00, 0x07, 0x03, 0x10); \
     ILI9341_CMD(0x29); /* Display ON */
 
-// Input (Your exact custom mapping)
+// Input
 #define RG_GAMEPAD_GPIO_MAP {\
     {RG_KEY_UP,     GPIO_NUM_38, GPIO_PULLUP_ONLY, 0},\
     {RG_KEY_DOWN,   GPIO_NUM_39, GPIO_PULLUP_ONLY, 0},\
@@ -51,6 +51,12 @@
     {RG_KEY_B,      GPIO_NUM_16, GPIO_PULLUP_ONLY, 0},\
     {RG_KEY_START,  GPIO_NUM_48, GPIO_PULLUP_ONLY, 0},\
     {RG_KEY_SELECT, GPIO_NUM_47, GPIO_PULLUP_ONLY, 0},\
+}
+
+// Virtual Map (Exit games using Select+Start)
+#define RG_GAMEPAD_VIRT_MAP {\
+    {RG_KEY_MENU,   RG_KEY_SELECT | RG_KEY_START},\
+    {RG_KEY_OPTION, RG_KEY_SELECT | RG_KEY_A},\
 }
 
 // Battery
