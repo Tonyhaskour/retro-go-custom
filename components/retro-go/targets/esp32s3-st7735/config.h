@@ -17,7 +17,7 @@
 #define RG_SCREEN_BACKLIGHT         1
 #define RG_SCREEN_WIDTH             160
 #define RG_SCREEN_HEIGHT            128
-#define RG_SCREEN_ROTATE            1   
+#define RG_SCREEN_ROTATE            3   
 #define RG_SCREEN_MARGIN_TOP        0   
 #define RG_SCREEN_MARGIN_BOTTOM     0
 #define RG_SCREEN_MARGIN_LEFT       0  
