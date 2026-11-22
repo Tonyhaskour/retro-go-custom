@@ -17,22 +17,19 @@
 #define RG_SCREEN_BACKLIGHT         1
 #define RG_SCREEN_WIDTH             160
 #define RG_SCREEN_HEIGHT            128
-#define RG_SCREEN_ROTATE            0   // Handled by MADCTL below
+
+// MUST BE 1 or 3 for landscape. 1 is opposite of 3.
+#define RG_SCREEN_ROTATE            1   
+
 #define RG_SCREEN_MARGIN_TOP        0   
 #define RG_SCREEN_MARGIN_BOTTOM     0
 #define RG_SCREEN_MARGIN_LEFT       0  
 #define RG_SCREEN_MARGIN_RIGHT      0  
 
-// ---- TEST KNOBS (CHANGE THESE IF COLORS ARE STILL WRONG) ----
-// MADCTL: 0xA0 = RGB order, 0xA8 = BGR order
-#define ST7735_MADCTL   0xA0   
-// INVERT: 0x20 = Inversion OFF, 0x21 = Inversion ON
-#define ST7735_INVERT   0x21   
-
 #define RG_SCREEN_INIT() \
     ILI9341_CMD(0x01); /* Software Reset */ \
     ILI9341_CMD(0x11); /* Sleep Out */ \
-    ILI9341_CMD(0x3A, 0x05); /* COLMOD: 16-bit RGB565 */ \
+    ILI9341_CMD(0x3A, 0x05); /* COLMOD: 16-bit RGB565 - CRITICAL FIX */ \
     ILI9341_CMD(0xB1, 0x01, 0x2C, 0x2D); /* Frame Rate Control */ \
     ILI9341_CMD(0xB2, 0x01, 0x2C, 0x2D); \
     ILI9341_CMD(0xB3, 0x01, 0x2C, 0x2D, 0x01, 0x2C, 0x2D); \
@@ -43,8 +40,6 @@
     ILI9341_CMD(0xC3, 0x8A, 0x2A); \
     ILI9341_CMD(0xC4, 0x8A, 0xEE); \
     ILI9341_CMD(0xC5, 0x0E); /* VCOM Control */ \
-    ILI9341_CMD(ST7735_INVERT); /* INVON or INVOFF */ \
-    ILI9341_CMD(0x36, ST7735_MADCTL); /* MADCTL: RGB/BGR order */ \
     ILI9341_CMD(0xE0, 0x0F, 0x1A, 0x0F, 0x18, 0x2F, 0x28, 0x20, 0x22, 0x1F, 0x1B, 0x23, 0x37, 0x00, 0x07, 0x02, 0x10); \
     ILI9341_CMD(0xE1, 0x0F, 0x1B, 0x0F, 0x17, 0x33, 0x2C, 0x29, 0x2E, 0x30, 0x30, 0x39, 0x3F, 0x00, 0x07, 0x03, 0x10); \
     ILI9341_CMD(0x13); /* Normal Display Mode */ \
