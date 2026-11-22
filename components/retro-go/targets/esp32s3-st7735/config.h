@@ -22,7 +22,7 @@
 #define RG_SCREEN_MARGIN_BOTTOM     0
 #define RG_SCREEN_MARGIN_LEFT       0  
 #define RG_SCREEN_MARGIN_RIGHT      0  
-
+#define RG_PIXEL_565_BE 1
 #define RG_SCREEN_INIT() \
     ILI9341_CMD(0x3A, 0x05); /* COLMOD: 16-bit RGB565 */ \
     ILI9341_CMD(0xB1, 0x01, 0x2C, 0x2D); /* Frame Rate Control */ \
