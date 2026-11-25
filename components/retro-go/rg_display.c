@@ -37,7 +37,7 @@ static const char *SETTING_CUSTOM_ZOOM = "DispCustomZoom";
 #endif
 
 // ---- Shrink filter: average source pixels instead of skipping them ----
-#define RG_COLOR_BARS_TEST 1   // ENABLED: This will show color bars in-game to test your screen
+#define RG_COLOR_BARS_TEST 0   // Disabled
 
 static uint16_t avg_row_buffer[RG_SCREEN_WIDTH];
 
@@ -197,14 +197,6 @@ static inline void write_update(const rg_surface_t *update)
                     RENDER_LINE(uint16_t, (buffer[x] << 8) | (buffer[x] >> 8))
                 else
                     RENDER_LINE(uint16_t, buffer[x])
-
-#if RG_COLOR_BARS_TEST
-                {   // TEMPORARY: replace the game picture with red / green / blue / white bars
-                    static const uint16_t bars[4] = {0x00F8, 0xE007, 0x1F00, 0xFFFF};
-                    for (int xx = 0; xx < draw_width; ++xx)
-                        (line_buffer_ptr - draw_width)[xx] = bars[xx * 4 / draw_width];
-                }
-#endif
 
                 if (partial_update)
                 {
