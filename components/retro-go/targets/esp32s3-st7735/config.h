@@ -24,8 +24,8 @@
 #define RG_SCREEN_MARGIN_RIGHT      0  
 
 // Test knobs
-#define ST7735_MADCTL   0xA8   // 0xA8 = BGR, 0xA0 = RGB
-#define ST7735_INVERT   0x20   // 0x20 = Inversion Off, 0x21 = Inversion On
+#define ST7735_MADCTL   0xA0   // Changed to 0xA0 (RGB) to fix the swapped Red/Blue
+#define ST7735_INVERT   0x20   // 0x20 = Inversion Off
 
 #define RG_SCREEN_INIT() \
     ILI9341_CMD(0x3A, 0x05); /* COLMOD: 16-bit RGB565 */ \
