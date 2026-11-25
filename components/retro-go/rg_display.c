@@ -6,6 +6,48 @@
 
 #define LCD_BUFFER_LENGTH (RG_SCREEN_WIDTH * 4) // In pixels
 
+// ---- Shrink filter: average source pixels instead of skipping them ----
+#define RG_COLOR_BARS_TEST 1   // ENABLED: This will show color bars in-game to test your screen
+
+static uint16_t avg_row_buffer[RG_SCREEN_WIDTH];
+
+// Average of two RGB565 pixels in panel byte order (big-endian), masked to 16 bits
+static inline __attribute__((always_inline)) unsigned avg565_be(unsigned a, unsigned b)
+{
+    if (a == b)
+        return a;
+    a = ((a << 8) | (a >> 8)) & 0xFFFFU;
+    b = ((b << 8) | (b >> 8)) & 0xFFFFU;
+    unsigned s = a ^ b;
+    unsigned v = ((s & 0xF7DEU) >> 1) + (a & b) + (s & 0x0821U);
+    return ((v << 8) | (v >> 8)) & 0xFFFFU;
+}
+
+static inline __attribute__((always_inline)) unsigned fetch_pixel_be(const void *row, int x, int format,
+                                                                      const uint16_t *palette)
+{
+    if (format & RG_PIXEL_PALETTE)
+        return palette[((const uint8_t *)row)[x]];
+    unsigned p = ((const uint16_t *)row)[x];
+    if (format == RG_PIXEL_565_LE)
+        p = ((p << 8) | (p >> 8)) & 0xFFFFU;
+    return p;
+}
+
+static inline __attribute__((always_inline)) void render_row_shrink(uint16_t *dst, const void *row, int format,
+                                                                     const uint16_t *palette, int width, bool avg_x)
+{
+    for (int xx = 0; xx < width; ++xx)
+    {
+        int x = map_viewport_to_source_x[xx];
+        unsigned p = fetch_pixel_be(row, x, format, palette);
+        if (avg_x && xx + 1 < width && map_viewport_to_source_x[xx + 1] - x > 1)
+            p = avg565_be(p, fetch_pixel_be(row, x + 1, format, palette));
+        dst[xx] = (uint16_t)p;
+    }
+}
+// -------------------------------------------------------------------------
+
 // static rg_display_driver_t driver;
 static rg_task_t *display_task_queue;
 static rg_display_counters_t counters;
@@ -89,6 +131,10 @@ static inline void write_update(const rg_surface_t *update)
 
     const bool partial_update = RG_SCREEN_PARTIAL_UPDATES;
 
+    // Average source pixels when shrinking (follows the Filter setting)
+    const bool shrink_x = filter_x && display.viewport.step_x > 1.0f;
+    const bool shrink_y = filter_y && display.viewport.step_y > 1.0f;
+
     int lines_per_buffer = LCD_BUFFER_LENGTH / draw_width;
     int lines_remaining = draw_height;
     int lines_updated = 0;
@@ -131,12 +177,34 @@ static inline void write_update(const rg_surface_t *update)
                         *line_buffer_ptr++ = (PIXEL); \
                     } \
                 }
-                if (format & RG_PIXEL_PALETTE)
+                
+                if (shrink_x || shrink_y)
+                {
+                    const int sy = map_viewport_to_source_y[y];
+                    const uint8_t *src_row = (const uint8_t *)data + sy * stride;
+                    render_row_shrink(line_buffer_ptr, src_row, format, palette, draw_width, shrink_x);
+                    if (shrink_y && y + 1 < draw_height && map_viewport_to_source_y[y + 1] - sy > 1)
+                    {
+                        render_row_shrink(avg_row_buffer, src_row + stride, format, palette, draw_width, shrink_x);
+                        for (int xx = 0; xx < draw_width; ++xx)
+                            line_buffer_ptr[xx] = avg565_be(line_buffer_ptr[xx], avg_row_buffer[xx]);
+                    }
+                    line_buffer_ptr += draw_width;
+                }
+                else if (format & RG_PIXEL_PALETTE)
                     RENDER_LINE(uint8_t, palette[buffer[x]])
                 else if (format == RG_PIXEL_565_LE)
                     RENDER_LINE(uint16_t, (buffer[x] << 8) | (buffer[x] >> 8))
                 else
                     RENDER_LINE(uint16_t, buffer[x])
+
+#if RG_COLOR_BARS_TEST
+                {   // TEMPORARY: replace the game picture with red / green / blue / white bars
+                    static const uint16_t bars[4] = {0x00F8, 0xE007, 0x1F00, 0xFFFF};
+                    for (int xx = 0; xx < draw_width; ++xx)
+                        (line_buffer_ptr - draw_width)[xx] = bars[xx * 4 / draw_width];
+                }
+#endif
 
                 if (partial_update)
                 {
@@ -399,7 +467,7 @@ display_filter_t rg_display_get_filter(void)
 void rg_display_set_rotation(display_rotation_t rotation)
 {
     config.rotation = RG_MIN(RG_MAX(0, rotation), RG_DISPLAY_ROTATION_COUNT - 1);
-    rg_settings_set_number(NS_APP, SETTING_SCALING, config.rotation);
+    rg_settings_set_number(NS_APP, SETTING_ROTATION, config.rotation); // Fixed: was SETTING_SCALING
     display.changed = true;
 }
 
