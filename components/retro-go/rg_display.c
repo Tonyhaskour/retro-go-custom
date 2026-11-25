@@ -6,6 +6,36 @@
 
 #define LCD_BUFFER_LENGTH (RG_SCREEN_WIDTH * 4) // In pixels
 
+// static rg_display_driver_t driver;
+static rg_task_t *display_task_queue;
+static rg_display_counters_t counters;
+static rg_display_config_t config;
+static rg_surface_t *osd;
+static rg_surface_t *border;
+static rg_display_t display;
+static int16_t map_viewport_to_source_x[RG_SCREEN_WIDTH + 1];
+static int16_t map_viewport_to_source_y[RG_SCREEN_HEIGHT + 1];
+static uint32_t screen_line_checksum[RG_SCREEN_HEIGHT + 1];
+
+#define LINE_IS_REPEATED(Y) (map_viewport_to_source_y[(Y)] == map_viewport_to_source_y[(Y) - 1])
+// This is to avoid flooring a number that is approximated to .9999999 and be explicit about it
+#define FLOAT_TO_INT(x) ((int)((x) + 0.1f))
+
+static const char *SETTING_BACKLIGHT = "DispBacklight";
+static const char *SETTING_SCALING = "DispScaling";
+static const char *SETTING_FILTER = "DispFilter";
+static const char *SETTING_ROTATION = "DispRotation";
+static const char *SETTING_BORDER = "DispBorder";
+static const char *SETTING_CUSTOM_ZOOM = "DispCustomZoom";
+
+#if RG_SCREEN_DRIVER == 0 /* ILI9341 */
+#include "drivers/display/ili9341.h"
+#elif RG_SCREEN_DRIVER == 99
+#include "drivers/display/sdl2.h"
+#else
+#include "drivers/display/dummy.h"
+#endif
+
 // ---- Shrink filter: average source pixels instead of skipping them ----
 #define RG_COLOR_BARS_TEST 1   // ENABLED: This will show color bars in-game to test your screen
 
@@ -47,36 +77,6 @@ static inline __attribute__((always_inline)) void render_row_shrink(uint16_t *ds
     }
 }
 // -------------------------------------------------------------------------
-
-// static rg_display_driver_t driver;
-static rg_task_t *display_task_queue;
-static rg_display_counters_t counters;
-static rg_display_config_t config;
-static rg_surface_t *osd;
-static rg_surface_t *border;
-static rg_display_t display;
-static int16_t map_viewport_to_source_x[RG_SCREEN_WIDTH + 1];
-static int16_t map_viewport_to_source_y[RG_SCREEN_HEIGHT + 1];
-static uint32_t screen_line_checksum[RG_SCREEN_HEIGHT + 1];
-
-#define LINE_IS_REPEATED(Y) (map_viewport_to_source_y[(Y)] == map_viewport_to_source_y[(Y) - 1])
-// This is to avoid flooring a number that is approximated to .9999999 and be explicit about it
-#define FLOAT_TO_INT(x) ((int)((x) + 0.1f))
-
-static const char *SETTING_BACKLIGHT = "DispBacklight";
-static const char *SETTING_SCALING = "DispScaling";
-static const char *SETTING_FILTER = "DispFilter";
-static const char *SETTING_ROTATION = "DispRotation";
-static const char *SETTING_BORDER = "DispBorder";
-static const char *SETTING_CUSTOM_ZOOM = "DispCustomZoom";
-
-#if RG_SCREEN_DRIVER == 0 /* ILI9341 */
-#include "drivers/display/ili9341.h"
-#elif RG_SCREEN_DRIVER == 99
-#include "drivers/display/sdl2.h"
-#else
-#include "drivers/display/dummy.h"
-#endif
 
 static inline unsigned blend_pixels(unsigned a, unsigned b)
 {
